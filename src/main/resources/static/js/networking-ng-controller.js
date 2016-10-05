@@ -41,7 +41,7 @@ angular.module('NetworkingAngularApp', [])
                     function successCallback(response) {
                         console.log(response.data);
                         console.log("Adding data to scope");
-                        $scope.loginContainer = response.data.user;
+                        $scope.loginContainer = response.data;
                         $scope.userWhoIsLoggedIn = $scope.loginContainer.user;
                         console.log("User who is logged in: " + $scope.userWhoIsLoggedIn.firstName + ", id: " + $scope.userWhoIsLoggedIn.id);
                     },
