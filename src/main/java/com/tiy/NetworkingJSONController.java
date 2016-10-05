@@ -260,6 +260,8 @@ public class NetworkingJSONController {
         int userId = friendConnectionContainer.getUserId();
         int userWhoWantsToBeFriendId = friendConnectionContainer.getUserWhoWantsToBeFriendId();
 
+        User requestingUser = users.findOne(userId);
+
         boolean onFriendList = false;
         //check the user's friend list by going to friend table and querying by userId.
         Iterable<Friend> allOfUsersFriends = friends.findAllByUserId(userId);
@@ -277,7 +279,7 @@ public class NetworkingJSONController {
             loginContainer.setUser(userToReturn);
         } else {
             //return container with error message and null user
-            loginContainer.setErrorMessage("Cannot access this person's email because you are not on their friend list.");
+            loginContainer.setErrorMessage("Cannot access " + requestingUser.getFirstName() + "'s email because you are not on their friend list.");
             loginContainer.setUser(null);
         }
         return loginContainer;

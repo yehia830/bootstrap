@@ -59,7 +59,10 @@
 
     <span ng-if="contactRequested">
         <span ng-if="userInfoContainer.errorMessage != null">
-            {{userInfoContainer.errorMessage}} <input type="button" value="Request Contact Info"/>
+            {{userInfoContainer.errorMessage}} <input type="button" ng-click="requestToBeFriends()" value="Request Contact Info"/>
+            <span ng-if="requestToBeFriendsContainerResponse">
+                Friend request sent to {{targetUser.firstName}}.
+            </span>
         </span>
 
         <span ng-if="userInfoContainer.user != null">

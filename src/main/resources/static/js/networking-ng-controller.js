@@ -134,8 +134,8 @@ angular.module('NetworkingAngularApp', [])
 
              //Make a container
              var showEmailContainer = {
-                  userId: $scope.userWhoIsLoggedIn.id,
-                  userWhoWantsToBeFriendId: targetUserId
+                  userId: targetUserId,
+                  userWhoWantsToBeFriendId: $scope.userWhoIsLoggedIn.id
              }
 
              console.log("About to send to /viewUserInfo.json -> userId: " + showEmailContainer.userId + ", targetUserId: " + showEmailContainer.userWhoWantsToBeFriendId);
@@ -147,12 +147,39 @@ angular.module('NetworkingAngularApp', [])
                          console.log("Adding data to scope");
                          $scope.userInfoContainer = response.data;
                          $scope.contactRequested = true;
+                         if ($scope.userInfoContainer.user != null) {
+                            $scope.targetUser = $scope.userInfoContainer.user;
+                         }
 
                      },
                      function errorCallback(response) {
                          console.log("Unable to get data...");
                      });
         };
+
+        $scope.requestToBeFriends = function() {
+                     console.log("In requestToBeFriends function in ng controller");
+
+                     //Make a container
+                     var requestToBeFriendsContainer = {
+                          userId: $scope.targetUser.id,
+                          userWhoWantsToBeFriendId: $scope.userWhoIsLoggedIn.id
+                     }
+
+//                     console.log("About to send to /viewUserInfo.json -> userId: " + showEmailContainer.userId + ", targetUserId: " + showEmailContainer.userWhoWantsToBeFriendId);
+
+                     $http.post("/requestContact.json", requestToBeFriendsContainer)
+                          .then(
+                             function successCallback(response) {
+                                 console.log(response.data);
+                                 console.log("Adding data to scope");
+                                 $scope.requestToBeFriendsContainerResponse = response.data;
+
+                             },
+                             function errorCallback(response) {
+                                 console.log("Unable to get data...");
+                             });
+                };
 
 //        $scope.viewUserInfo = function(requesterUserId, requesteeUserId) {
 //             console.log("In viewUserInfo function in ng controller");
@@ -245,6 +272,7 @@ angular.module('NetworkingAngularApp', [])
         $scope.showAttendees = false;
         $scope.currentEvent;
         $scope.contactRequested = false;
+        $scope.targetUser;
         console.log("Page loaded!");
 
     });
