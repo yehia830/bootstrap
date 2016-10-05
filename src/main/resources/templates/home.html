@@ -14,7 +14,7 @@
 
 <!--<%^loginContainer%>-->
 <span ng-if="!loginContainer">
-    -- Register --
+    -- Register -- <br/>
     Email: <input type="text" ng-model="email"/> <br/>
     First name: <input type="text" ng-model="firstName"/> <br/>
     Last name: <input type="text" ng-model="lastName"/> <br/>
@@ -61,7 +61,7 @@
     <input type="button" ng-click="getAllEvents()" value="Get list of ALL events"/><br/>
     <ul>
     <span ng-repeat="event in listOfEvents">
-        <li>{{event.name}} at {{event.location}}, {{event.date}}, {{event.time}} <input type="button" ng-click="seeAttendees(event)" value="See Attendees"/> <input type="button" ng-click="joinEvent(userWhoIsLoggedIn.id, event.id)" value="Check in"/></li> <br/>
+        <li>{{event.name}} at {{event.location}}, {{event.date}}, {{event.time}} <input type="button" ng-click="seeAttendees(event)" value="See Attendees"/> <input type="button" ng-click="joinEvent(userWhoIsLoggedIn.id, event.id)" value="Check in"/> </li> <br/>
     </span>
     </ul>
     <br/><br/><br/><br/><br/>

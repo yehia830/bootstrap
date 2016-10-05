@@ -184,9 +184,13 @@ public class NetworkingJSONController {
         //use eventId to go get eventBeingJoined
         Event eventBeingJoined = events.findOne(idContainer.getEventId());
 
-        //Save user and event connection to userEvents table in db
-        UserEvent userEvent = new UserEvent(userJoiningEvent, eventBeingJoined);
-        userEvents.save(userEvent);
+        //check to see if user is already going to event
+        if (userEvents.findByUserIdAndEventId(userJoiningEvent.getId(), eventBeingJoined.getId()).isEmpty()) {
+            //Save user and event connection to userEvents table in db
+            UserEvent userEvent = new UserEvent(userJoiningEvent, eventBeingJoined);
+            userEvents.save(userEvent);
+            System.out.println("Adding user " + userJoiningEvent.getFirstName() + " " + userJoiningEvent.getLastName() + " to event " + eventBeingJoined.getName());
+        }
 
         //add userJoiningEvent to eventBeingJoined's list of attendees
         //it says attendees is null??
@@ -198,8 +202,6 @@ public class NetworkingJSONController {
         for (UserEvent currentUserEvent : allUserEventsLinkedToThisEvent) {
             thisEventsAttendees.add(currentUserEvent.getUser());
         }
-
-        System.out.println("Adding user " + userJoiningEvent.getFirstName() + " " + userJoiningEvent.getLastName() + " to event " + eventBeingJoined.getName());
 
         //resave eventBeingJoined with updated list of attendees
         //now won't need to do this bc just linking with userEvents table instead of array list in event class
