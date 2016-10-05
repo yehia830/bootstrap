@@ -205,6 +205,17 @@ public class NetworkingJSONController {
         return listOfUserEvents;
     }
 
+    //We need an eventId
+    @RequestMapping(path = "/seeAttendeesForEvent.json", method = RequestMethod.POST)
+    public ArrayList<UserEvent> seeAttendees(@RequestBody int eventId) {
+        ArrayList<UserEvent> listOfAttendeesForEvent = new ArrayList<>();
+        Iterable<UserEvent> allUserEvents = userEvents.findAllByEventId(eventId);
+        for (UserEvent currentUserEvent : allUserEvents) {
+            listOfAttendeesForEvent.add(currentUserEvent);
+        }
+        return listOfAttendeesForEvent;
+    }
+
     // What we need from Dan: container (FriendConnectionContainer object) holding userId and friendID
     // PROBLEM: RIGHT NOW THIS IS NOT ASKING THE USER TO GRANT PERMISSION. WILL NEED 2 ENDPOINTS I THINK.
     // This one is just adding the friend connection in friend database and returning the user's friends, so

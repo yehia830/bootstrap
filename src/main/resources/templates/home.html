@@ -37,12 +37,25 @@
 </span>
 
 <span ng-if="loginContainer">
-    Welcome, {{user.firstName}} {{user.lastName}}! <br/>
-    <input type="button" ng-click="getAllEvents()" value="Get list of events"/><br/>
+    Welcome, {{userWhoIsLoggedIn.firstName}} {{userWhoIsLoggedIn.lastName}}! <br/>
+    <input type="button" ng-click="getAllEvents()" value="Get list of ALL events"/><br/>
+    <ul>
     <span ng-repeat="event in listOfEvents">
-        {{event.name}} at {{event.location}}, {{event.date}}, {{event.time}} <br/>
+        <li>{{event.name}} at {{event.location}}, {{event.date}}, {{event.time}} <input type="button" ng-click="seeAttendees(event)" value="See Attendees"/> <input type="button" ng-click="joinEvent(userWhoIsLoggedIn.id, event.id)" value="Check in"/></li> <br/>
     </span>
+    </ul>
     <br/><br/><br/><br/><br/>
+
+    <span ng-if="showAttendees">
+        Attendees at {{currentEvent.name}}: <br/>
+        <ol>
+        <span ng-repeat="attendee in eventAttendees">
+            <li> {{attendee.firstName}} {{attendee.lastName}}</li> <br/>
+        </span>
+        </ol>
+    </span>
+
+    <br/><br/><br/><br/>
 
     Add an event:<br/>
     Event name: <input type="text" ng-model="newEventName"/> <br/>
@@ -52,17 +65,17 @@
     <input type="button" ng-click="createNewEvent(newEventName, newEventLocation, newEventDate, newEventTime)" value="Create"/> <br/>
 
 
-    <br/><br/><br/><br/><br/>
-    Join an event: (Note: just for testing. Can get these from /viewusers.json and /getAllEvents.json)<br/>
-    Your user id: <input type="number" ng-model="myUserId"/>
-    Event id: <input type="number" ng-model="eventIWantToJoinId"/>
-    <input type="button" ng-click="joinEvent(myUserId, eventIWantToJoinId)" value="Join"/> <br/>
+    <!--<br/><br/><br/><br/><br/>-->
+    <!--Join an event: (Note: just for testing. Can get these from /viewusers.json and /getAllEvents.json)<br/>-->
+    <!--Your user id: <input type="number" ng-model="myUserId"/>-->
+    <!--Event id: <input type="number" ng-model="eventIWantToJoinId"/>-->
+    <!--<input type="button" ng-click="joinEvent(myUserId, eventIWantToJoinId)" value="Join"/> <br/>-->
 
-    <br/>
-    Updated attendees at this event: <br/>
-    <span ng-repeat="currentAttendee in eventAttendees">
-        {{currentAttendee}} <br/>
-    </span>
+    <!--<br/>-->
+    <!--Updated attendees at this event: <br/>-->
+    <!--<span ng-repeat="currentAttendee in eventAttendees">-->
+        <!--{{currentAttendee}} <br/>-->
+    <!--</span>-->
 
 
 

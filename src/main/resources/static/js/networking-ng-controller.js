@@ -19,6 +19,8 @@ angular.module('NetworkingAngularApp', [])
                         console.log(response.data);
                         console.log("Adding data to scope");
                         $scope.loginContainer = response.data;
+                        $scope.userWhoIsLoggedIn = $scope.loginContainer.user;
+                        console.log("User who is logged in: " + $scope.userWhoIsLoggedIn.firstName + ", id: " + $scope.userWhoIsLoggedIn.id);
                     },
                     function errorCallback(response) {
                         console.log("Unable to get data...");
@@ -40,6 +42,8 @@ angular.module('NetworkingAngularApp', [])
                         console.log(response.data);
                         console.log("Adding data to scope");
                         $scope.loginContainer = response.data.user;
+                        $scope.userWhoIsLoggedIn = $scope.loginContainer.user;
+                        console.log("User who is logged in: " + $scope.userWhoIsLoggedIn.firstName + ", id: " + $scope.userWhoIsLoggedIn.id);
                     },
                     function errorCallback(response) {
                         console.log("Unable to get data...");
@@ -83,6 +87,24 @@ angular.module('NetworkingAngularApp', [])
                          console.log("Unable to get data...");
                      });
          };
+
+        $scope.seeAttendees = function(eventIWantToJoin) {
+             console.log("In seeAttendees function in ng controller");
+
+             $http.post("/seeAttendeesForEvent.json", eventIWantToJoin.id)
+                  .then(
+                     function successCallback(response) {
+                         console.log(response.data);
+                         console.log("Adding data to scope");
+                         // Returns a list of attendees
+                         $scope.eventAttendees = response.data;
+                         $scope.showAttendees = true;
+                         $scope.currentEvent = eventIWantToJoin;
+                     },
+                     function errorCallback(response) {
+                         console.log("Unable to get data...");
+                     });
+        };
 
         $scope.joinEvent = function(myUserId, eventIWantToJoinId) {
              console.log("In joinEvent function in ng controller");
@@ -193,6 +215,9 @@ angular.module('NetworkingAngularApp', [])
                      });
         };
 
+        $scope.userWhoIsLoggedIn;
+        $scope.showAttendees = false;
+        $scope.currentEvent;
         console.log("Page loaded!");
 
     });
