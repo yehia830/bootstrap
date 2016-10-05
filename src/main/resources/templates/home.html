@@ -38,6 +38,14 @@
 
 <span ng-if="loginContainer">
     Welcome, {{userWhoIsLoggedIn.firstName}} {{userWhoIsLoggedIn.lastName}}! <br/>
+    <span ng-if="loginContainer.usersWhoWantMyInfo.length > 0">
+        You have contact requests! <br/>
+        <ul>
+        <span ng-repeat="requestUser in loginContainer.usersWhoWantMyInfo">
+            <li>{{requestUser.firstName}} {{requestUser.lastName}}</li>
+        </span>
+        </ul>
+    </span>
     <input type="button" ng-click="getAllEvents()" value="Get list of ALL events"/><br/>
     <ul>
     <span ng-repeat="event in listOfEvents">
@@ -50,7 +58,7 @@
         Attendees at {{currentEvent.name}}: <br/>
         <ol>
         <span ng-repeat="attendee in eventAttendees">
-            <li> {{attendee.firstName}} {{attendee.lastName}} <input type="button" ng-click="showEmail(attendee.id)" value="Email"/> </li> <br/>
+            <li> {{attendee.firstName}} {{attendee.lastName}} <input type="button" ng-click="showEmail(attendee)" value="Email"/> </li> <br/>
         </span>
         </ol>
     </span>
@@ -62,6 +70,7 @@
             {{userInfoContainer.errorMessage}} <input type="button" ng-click="requestToBeFriends()" value="Request Contact Info"/>
             <span ng-if="requestToBeFriendsContainerResponse">
                 Friend request sent to {{targetUser.firstName}}.
+
             </span>
         </span>
 

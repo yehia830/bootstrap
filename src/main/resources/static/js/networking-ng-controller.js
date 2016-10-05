@@ -129,16 +129,18 @@ angular.module('NetworkingAngularApp', [])
                      });
         };
 
-        $scope.showEmail = function(targetUserId) {
+        $scope.showEmail = function(paramTargetUser) {
              console.log("In showEmail function in ng controller");
 
              //Make a container
              var showEmailContainer = {
-                  userId: targetUserId,
+                  userId: paramTargetUser.id,
                   userWhoWantsToBeFriendId: $scope.userWhoIsLoggedIn.id
              }
 
-             console.log("About to send to /viewUserInfo.json -> userId: " + showEmailContainer.userId + ", targetUserId: " + showEmailContainer.userWhoWantsToBeFriendId);
+             $scope.targetUser = paramTargetUser;
+
+             console.log("About to send to /viewUserInfo.json -> userId: " + showEmailContainer.userId + ", paramTargetUser.id: " + showEmailContainer.userWhoWantsToBeFriendId);
 
              $http.post("/viewUserInfo.json", showEmailContainer)
                   .then(
@@ -147,9 +149,10 @@ angular.module('NetworkingAngularApp', [])
                          console.log("Adding data to scope");
                          $scope.userInfoContainer = response.data;
                          $scope.contactRequested = true;
-                         if ($scope.userInfoContainer.user != null) {
-                            $scope.targetUser = $scope.userInfoContainer.user;
-                         }
+//                         if ($scope.userInfoContainer.user != null) {
+//                            $scope.targetUser = $scope.userInfoContainer.user;
+//                            console.log("***setting target user now");
+//                         }
 
                      },
                      function errorCallback(response) {

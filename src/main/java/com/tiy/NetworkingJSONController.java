@@ -42,12 +42,24 @@ public class NetworkingJSONController {
 //        retrievedUser.setListOfPeopleAndStatusForSeeingMyStuff(myHashMap);
         LoginContainer myLoginContainer;
         if (retrievedUser == null) {
-            myLoginContainer = new LoginContainer("Could not create user", null);
+            myLoginContainer = new LoginContainer("Could not create user", null, null);
         } else {
-            myLoginContainer = new LoginContainer(null, retrievedUser);
+            ArrayList<User> listOfUsersWhoWantMyContact = getListOfUsersWhoWantMyContact(retrievedUser);
+            myLoginContainer = new LoginContainer(null, retrievedUser, listOfUsersWhoWantMyContact);
         }
 
         return myLoginContainer;
+    }
+
+    public ArrayList<User> getListOfUsersWhoWantMyContact(User user) {
+        Iterable<NotificationConnection> notificationConnectionsByUser = notificationConnections.findAllByUserId(user.getId());
+        ArrayList<User> listOfUsersWhoWantMyContact = new ArrayList<>();
+        for (NotificationConnection currentNotificationConnection : notificationConnectionsByUser) {
+            int friendId = currentNotificationConnection.getFriendId();
+            User currentFriend = users.findOne(friendId);
+            listOfUsersWhoWantMyContact.add(currentFriend);
+        }
+        return listOfUsersWhoWantMyContact;
     }
 
     @RequestMapping(path = "/viewUsers.json", method = RequestMethod.GET)
@@ -75,13 +87,17 @@ public class NetworkingJSONController {
             if (thisUser == null) {
                 myLoginContainer.setErrorMessage("User does not have account");
                 myLoginContainer.setUser(null);
+                myLoginContainer.setUsersWhoWantMyInfo(null);
             } else {
                 if (!user.password.equals(thisUser.password)) {
                     myLoginContainer.setErrorMessage("Password does not match");
                     myLoginContainer.setUser(null);
+                    myLoginContainer.setUsersWhoWantMyInfo(null);
                 } else {
                     myLoginContainer.setErrorMessage(null);
                     myLoginContainer.setUser(thisUser);
+                    ArrayList<User> listOfUsersWhoWantMyContact = getListOfUsersWhoWantMyContact(thisUser);
+                    myLoginContainer.setUsersWhoWantMyInfo(listOfUsersWhoWantMyContact);
                     System.out.println("New login from: " + thisUser.getFirstName() + " " + thisUser.getLastName());
                 }
             }
@@ -260,7 +276,8 @@ public class NetworkingJSONController {
         int userId = friendConnectionContainer.getUserId();
         int userWhoWantsToBeFriendId = friendConnectionContainer.getUserWhoWantsToBeFriendId();
 
-        User requestingUser = users.findOne(userId);
+//        User requestingUser = users.findOne(userId);
+        User requestingUser = users.findOne(userWhoWantsToBeFriendId);
 
         boolean onFriendList = false;
         //check the user's friend list by going to friend table and querying by userId.
@@ -279,7 +296,7 @@ public class NetworkingJSONController {
             loginContainer.setUser(userToReturn);
         } else {
             //return container with error message and null user
-            loginContainer.setErrorMessage("Cannot access " + requestingUser.getFirstName() + "'s email because you are not on their friend list.");
+            loginContainer.setErrorMessage("Cannot access " + requestingUser.getFirstName() + "'s email - not on friend's list!");
             loginContainer.setUser(null);
         }
         return loginContainer;
