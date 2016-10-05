@@ -277,6 +277,7 @@ public class NetworkingJSONController {
         int userWhoWantsToBeFriendId = friendConnectionContainer.getUserWhoWantsToBeFriendId();
 
 //        User requestingUser = users.findOne(userId);
+        User targetUser = users.findOne(userId);
         User requestingUser = users.findOne(userWhoWantsToBeFriendId);
 
         boolean onFriendList = false;
@@ -296,7 +297,7 @@ public class NetworkingJSONController {
             loginContainer.setUser(userToReturn);
         } else {
             //return container with error message and null user
-            loginContainer.setErrorMessage("Cannot access " + requestingUser.getFirstName() + "'s email - not on friend's list!");
+            loginContainer.setErrorMessage("Cannot access " + targetUser.getFirstName() + "'s email - not on friend's list!");
             loginContainer.setUser(null);
         }
         return loginContainer;
@@ -355,10 +356,10 @@ public class NetworkingJSONController {
 
     //When user gets a notification, and wants to give the other person their email, go to this endpoint.
     //It will add the other person to their list of friends.
-    //It will give back the friend user object
+    //It will give back the user's list of friends.
     //What we need from Dan: container holding int userId, int userWhoWantsToBeFriendId
     @RequestMapping(path = "/addToMyFriendList.json")
-    public User addToMyFriendList(@RequestBody FriendConnectionContainer friendConnectionContainer) {
+    public ArrayList<User> addToMyFriendList(@RequestBody FriendConnectionContainer friendConnectionContainer) {
         int userId = friendConnectionContainer.getUserId();
         int userWhoWantsToBeFriendId = friendConnectionContainer.getUserWhoWantsToBeFriendId();
 
@@ -366,11 +367,21 @@ public class NetworkingJSONController {
         User friendUser = users.findOne(userWhoWantsToBeFriendId);
         Friend newFriend;
 
+        ArrayList<User> allMyFriends = null;
+
         if (friendUser != null) {
             newFriend = new Friend(users.findOne(userId), userWhoWantsToBeFriendId);
             friends.save(newFriend);
             System.out.println("User added to your friend list: " + friendUser.getFirstName());
             System.out.println("New friend in database with id: " + newFriend.getId());
+
+            allMyFriends = new ArrayList<>();
+            Iterable<Friend> allFriendsByUser = friends.findAllByUserId(userId);
+            for (Friend currentFriend : allFriendsByUser) {
+                int currentFriendId = currentFriend.getFriendId();
+                User currentFriendUser = users.findOne(currentFriendId);
+                allMyFriends.add(currentFriendUser);
+            }
 
 //            updateUsersListOfPeopleWhoCanSeeMyStuff(currentUser);
 
@@ -378,7 +389,7 @@ public class NetworkingJSONController {
             NotificationConnection thisNotificationConnection = notificationConnections.findByUserIdAndFriendId(userId, userWhoWantsToBeFriendId);
             notificationConnections.delete(thisNotificationConnection.getId());
         }
-        return friendUser;
+        return allMyFriends;
     }
 
     // Just for us to see what's in notification connection table

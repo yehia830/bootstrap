@@ -42,10 +42,22 @@
         You have contact requests! <br/>
         <ul>
         <span ng-repeat="requestUser in loginContainer.usersWhoWantMyInfo">
-            <li>{{requestUser.firstName}} {{requestUser.lastName}}</li>
+            <li>{{requestUser.firstName}} {{requestUser.lastName}} <input type="button" ng-click="acceptRequest(requestUser)" value="Accept request"</li>
         </span>
         </ul>
     </span>
+
+    <span ng-if="myListOfFriends">
+        My list of friends: <br/>
+        <ol>
+            <span ng-repeat="friendPerson in myListOfFriends">
+                <li>{{friendPerson.firstName}} {{friendPerson.lastName}}</li>
+            </span>
+        </ol>
+    </span>
+
+    <br/><br/>
+
     <input type="button" ng-click="getAllEvents()" value="Get list of ALL events"/><br/>
     <ul>
     <span ng-repeat="event in listOfEvents">

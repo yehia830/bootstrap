@@ -271,6 +271,27 @@ angular.module('NetworkingAngularApp', [])
                      });
         };
 
+        $scope.acceptRequest = function(requestUser) {
+             console.log("In acceptRequest function in ng controller");
+
+             //Make a container
+             var acceptRequestContainer = {
+                  userId: $scope.userWhoIsLoggedIn.id,
+                  userWhoWantsToBeFriendId: requestUser.id
+             }
+
+             $http.post("/addToMyFriendList.json", acceptRequestContainer)
+                  .then(
+                     function successCallback(response) {
+                         console.log(response.data);
+                         console.log("Adding data to scope");
+                         $scope.myListOfFriends = response.data;
+                     },
+                     function errorCallback(response) {
+                         console.log("Unable to get data...");
+                     });
+        };
+
         $scope.userWhoIsLoggedIn;
         $scope.showAttendees = false;
         $scope.currentEvent;
