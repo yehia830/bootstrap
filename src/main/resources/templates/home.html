@@ -12,89 +12,93 @@
 {{! the default angularjs delimeters - https://mustache.github.io/mustache.5.html for more info }}
 {{=<% %>=}}
 
-On event networking page!!
-<br/><br/>
-Email: <input type="text" ng-model="email"/> <br/>
-First name: <input type="text" ng-model="firstName"/> <br/>
-Last name: <input type="text" ng-model="lastName"/> <br/>
-Password: <input type="text" ng-model="password"/> <br/>
-Tech skills: <input type="text" ng-model="techSkills"/> <br/>
-<input type="button" ng-click="register(email, firstName, lastName, password, techSkills)" value="Send"/>
+<!--<%^loginContainer%>-->
+<span ng-if="!loginContainer">
+    <br/><br/>
+    Email: <input type="text" ng-model="email"/> <br/>
+    First name: <input type="text" ng-model="firstName"/> <br/>
+    Last name: <input type="text" ng-model="lastName"/> <br/>
+    Password: <input type="text" ng-model="password"/> <br/>
+    Tech skills: <input type="text" ng-model="techSkills"/> <br/>
+    <input type="button" ng-click="register(email, firstName, lastName, password, techSkills)" value="Send"/>
 
-<br/>
-{{loginContainer}}
+    <br/>
+    {{loginContainer}}
 
-<br/><br/><br/><br/><br/>
-OR login to your existing account:<br/>
-Email: <input type="text" ng-model="loginEmail"/> <br/>
-Password: <input type="text" ng-model="loginPassword"/> <br/>
-<input type="button" ng-click="login(loginEmail, loginPassword)" value="Send"/>
+    <br/><br/><br/><br/><br/>
+    OR login to your existing account:<br/>
+    Email: <input type="text" ng-model="loginEmail"/> <br/>
+    Password: <input type="text" ng-model="loginPassword"/> <br/>
+    <input type="button" ng-click="login(loginEmail, loginPassword)" value="Send"/>
 
-{{loginContainerForLogin}}
+    {{loginContainer}}
 
-
-<br/><br/><br/><br/><br/>
-Add an event:<br/>
-Event name: <input type="text" ng-model="newEventName"/> <br/>
-Location: <input type="text" ng-model="newEventLocation"/> <br/>
-Date: <input type="text" ng-model="newEventDate"/> <br/>
-Time: <input type="text" ng-model="newEventTime"/> <br/>
-<input type="button" ng-click="createNewEvent(newEventName, newEventLocation, newEventDate, newEventTime)" value="Create"/> <br/>
-
-<br/>
-All Events: <br/>
-<span ng-repeat="currentEvent in allEvents">
-    {{currentEvent}} <br/>
+<!--<%/loginContainer%>-->
 </span>
 
-<br/><br/><br/><br/><br/>
-Join an event: (Note: just for testing. Can get these from /viewusers.json and /getAllEvents.json)<br/>
-Your user id: <input type="number" ng-model="myUserId"/>
-Event id: <input type="number" ng-model="eventIWantToJoinId"/>
-<input type="button" ng-click="joinEvent(myUserId, eventIWantToJoinId)" value="Join"/> <br/>
+<span ng-if="loginContainer">
+    Welcome, {{user.firstName}} {{user.lastName}}! <br/>
+    <input type="button" ng-click="getAllEvents()" value="Get list of events"/><br/>
+    <span ng-repeat="event in listOfEvents">
+        {{event.name}} at {{event.location}}, {{event.date}}, {{event.time}} <br/>
+    </span>
+    <br/><br/><br/><br/><br/>
 
-<br/>
-Updated attendees at this event: <br/>
-<span ng-repeat="currentAttendee in eventAttendees">
-    {{currentAttendee}} <br/>
+    Add an event:<br/>
+    Event name: <input type="text" ng-model="newEventName"/> <br/>
+    Location: <input type="text" ng-model="newEventLocation"/> <br/>
+    Date: <input type="text" ng-model="newEventDate"/> <br/>
+    Time: <input type="text" ng-model="newEventTime"/> <br/>
+    <input type="button" ng-click="createNewEvent(newEventName, newEventLocation, newEventDate, newEventTime)" value="Create"/> <br/>
+
+
+    <br/><br/><br/><br/><br/>
+    Join an event: (Note: just for testing. Can get these from /viewusers.json and /getAllEvents.json)<br/>
+    Your user id: <input type="number" ng-model="myUserId"/>
+    Event id: <input type="number" ng-model="eventIWantToJoinId"/>
+    <input type="button" ng-click="joinEvent(myUserId, eventIWantToJoinId)" value="Join"/> <br/>
+
+    <br/>
+    Updated attendees at this event: <br/>
+    <span ng-repeat="currentAttendee in eventAttendees">
+        {{currentAttendee}} <br/>
+    </span>
+
+
+
+    <!--<br/><br/><br/><br/><br/>-->
+    <!--Request to see another attendee's info:-->
+    <!--Your userId: <input type="number" ng-model="requesterUserId"/> <br/>-->
+    <!--Their userId: <input type="number" ng-model="requesteeUserId"/> <br/>-->
+    <!--<input type="button" ng-click="viewUserInfo(requesterUserId, requesteeUserId)" value="Go"/> <br/>-->
+    <!--Response: {{friendContainer}} <br/><br/>-->
+
+    <br/><br/><br/><br/><br/>
+    Add this person to my friend list so that they can see my email: <br/>
+    My user ID: <input type="number" ng-model="myUserIdAllow"/> <br/>
+    Person who is requesting to be my friend's ID: <input type="number" ng-model="friendUserIdAllow"/> <br/>
+    <input type="button" ng-click="addToMyFriendList(myUserIdAllow, friendUserIdAllow)" value="Update"/> <br/>
+    User whose friend list was just updated: {{addToMyFriendListUser.firstName}} {{addToMyFriendListUser.lastName}} <br/>
+    Users on my friend list: {{addToMyFriendListUser.listOfPeopleWhoCanSeeMyStuff}}<br/>
+
+
+    <br/><br/><br/><br/><br/>
+    Test -- Do I have access to this person's email?? <br/>
+    My user ID: <input type="number" ng-model="myUserIdCheck"/> <br/>
+    Their user ID: <input type="number" ng-model="theirUserIdCheck"/> <br/>
+    <input type="button" ng-click="checkIfIHaveAccess(myUserIdCheck, theirUserIdCheck)" value="Check"/> <br/>
+    If yes, should get a their user object back.
+    If no, should get error message. <br/>
+    {{doIHaveAccessResponse}} <br/><br/>
+
+
+    <br/><br/><br/><br/><br/>
+    Test -- Request contact info from someone! This means I should be added to their list of notification connections. <br/>
+    My user ID: <input type="number" ng-model="myUserIdRequestContact"/> <br/>
+    Their user ID: <input type="number" ng-model="theirUserIdRequestContact"/> <br/>
+    <input type="button" ng-click="requestContact(myUserIdRequestContact, theirUserIdRequestContact)" value="Request"/> <br/>
+    User who gets notification: {{requestContactResponse.userGettingNotification.firstName}} {{requestContactResponse.userGettingNotification.lastName}}
+    List of users who want to contact this user: {{requestContactResponse.usersRequestingContact}} <br/><br/>
 </span>
-
-
-
-<!--<br/><br/><br/><br/><br/>-->
-<!--Request to see another attendee's info:-->
-<!--Your userId: <input type="number" ng-model="requesterUserId"/> <br/>-->
-<!--Their userId: <input type="number" ng-model="requesteeUserId"/> <br/>-->
-<!--<input type="button" ng-click="viewUserInfo(requesterUserId, requesteeUserId)" value="Go"/> <br/>-->
-<!--Response: {{friendContainer}} <br/><br/>-->
-
-<br/><br/><br/><br/><br/>
-Add this person to my friend list so that they can see my email: <br/>
-My user ID: <input type="number" ng-model="myUserIdAllow"/> <br/>
-Person who is requesting to be my friend's ID: <input type="number" ng-model="friendUserIdAllow"/> <br/>
-<input type="button" ng-click="addToMyFriendList(myUserIdAllow, friendUserIdAllow)" value="Update"/> <br/>
-User whose friend list was just updated: {{addToMyFriendListUser.firstName}} {{addToMyFriendListUser.lastName}} <br/>
-Users on my friend list: {{addToMyFriendListUser.listOfPeopleWhoCanSeeMyStuff}}<br/>
-
-
-<br/><br/><br/><br/><br/>
-Test -- Do I have access to this person's email?? <br/>
-My user ID: <input type="number" ng-model="myUserIdCheck"/> <br/>
-Their user ID: <input type="number" ng-model="theirUserIdCheck"/> <br/>
-<input type="button" ng-click="checkIfIHaveAccess(myUserIdCheck, theirUserIdCheck)" value="Check"/> <br/>
-If yes, should get a their user object back.
-If no, should get error message. <br/>
-{{doIHaveAccessResponse}} <br/><br/>
-
-
-<br/><br/><br/><br/><br/>
-Test -- Request contact info from someone! This means I should be added to their list of notification connections. <br/>
-My user ID: <input type="number" ng-model="myUserIdRequestContact"/> <br/>
-Their user ID: <input type="number" ng-model="theirUserIdRequestContact"/> <br/>
-<input type="button" ng-click="requestContact(myUserIdRequestContact, theirUserIdRequestContact)" value="Request"/> <br/>
-User who gets notification: {{requestContactResponse.userGettingNotification.firstName}} {{requestContactResponse.userGettingNotification.lastName}}
-List of users who want to contact this user: {{requestContactResponse.usersRequestingContact}} <br/><br/>
-
-
 </body>
 </html>

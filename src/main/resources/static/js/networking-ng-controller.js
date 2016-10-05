@@ -39,7 +39,22 @@ angular.module('NetworkingAngularApp', [])
                     function successCallback(response) {
                         console.log(response.data);
                         console.log("Adding data to scope");
-                        $scope.loginContainerForLogin = response.data;
+                        $scope.loginContainer = response.data.user;
+                    },
+                    function errorCallback(response) {
+                        console.log("Unable to get data...");
+                    });
+        };
+
+        $scope.getAllEvents = function() {
+            console.log("In getAllEvents function in ng controller");
+
+            $http.post("/getAllEvents.json")
+                .then(
+                    function successCallback(response) {
+                        console.log(response.data);
+                        console.log("Adding data to scope");
+                        $scope.listOfEvents = response.data;
                     },
                     function errorCallback(response) {
                         console.log("Unable to get data...");
@@ -62,7 +77,7 @@ angular.module('NetworkingAngularApp', [])
                      function successCallback(response) {
                          console.log(response.data);
                          console.log("Adding data to scope");
-                         $scope.allEvents = response.data;
+                         $scope.listOfEvents = response.data;
                      },
                      function errorCallback(response) {
                          console.log("Unable to get data...");

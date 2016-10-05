@@ -25,8 +25,8 @@ public class Event {
     @Column(nullable = false)
     String time;
 
-    @Column
-    ArrayList<User> attendees = new ArrayList<>();
+//    @Column
+//    ArrayList<User> attendees = new ArrayList<>();
 //    ArrayList<User> attendees;
 
 //    @ManyToOne
@@ -44,10 +44,10 @@ public class Event {
 //        this.attendees = new ArrayList<>();
     }
 
-    public void addToAttendees(User user) {
-        //But I will need to resave whole event to db as well in json controller. (check)
-        attendees.add(user);
-    }
+//    public void addToAttendees(User user) {
+//        //But I will need to resave whole event to db as well in json controller. (check)
+//        attendees.add(user);
+//    }
 
     // Getters and setters
     public int getId() {
@@ -88,14 +88,6 @@ public class Event {
 
     public void setTime(String time) {
         this.time = time;
-    }
-
-    public ArrayList<User> getAttendees() {
-        return attendees;
-    }
-
-    public void setAttendees(ArrayList<User> attendees) {
-        this.attendees = attendees;
     }
 
 }

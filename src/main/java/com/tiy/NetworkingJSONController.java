@@ -96,7 +96,7 @@ public class NetworkingJSONController {
         ArrayList<Event> allEvents = new ArrayList<Event>();
         for (Event event : listOfEvents) {
             //set the event's list of attendees before adding
-            event.setAttendees(setListOfAttendees(event));
+//            event.setAttendees(setListOfAttendees(event));
             allEvents.add(event);
         }
         return allEvents;
@@ -108,7 +108,7 @@ public class NetworkingJSONController {
         ArrayList<Event> allEvents = new ArrayList<Event>();
         for (Event event : listOfEvents) {
             //set the event's list of attendees before adding
-            event.setAttendees(setListOfAttendees(event));
+//            event.setAttendees(setListOfAttendees(event));
             allEvents.add(event);
         }
         return allEvents;
