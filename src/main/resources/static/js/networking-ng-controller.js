@@ -129,6 +129,31 @@ angular.module('NetworkingAngularApp', [])
                      });
         };
 
+        $scope.showEmail = function(targetUserId) {
+             console.log("In showEmail function in ng controller");
+
+             //Make a container
+             var showEmailContainer = {
+                  userId: $scope.userWhoIsLoggedIn.id,
+                  userWhoWantsToBeFriendId: targetUserId
+             }
+
+             console.log("About to send to /viewUserInfo.json -> userId: " + showEmailContainer.userId + ", targetUserId: " + showEmailContainer.userWhoWantsToBeFriendId);
+
+             $http.post("/viewUserInfo.json", showEmailContainer)
+                  .then(
+                     function successCallback(response) {
+                         console.log(response.data);
+                         console.log("Adding data to scope");
+                         $scope.userInfoContainer = response.data;
+                         $scope.contactRequested = true;
+
+                     },
+                     function errorCallback(response) {
+                         console.log("Unable to get data...");
+                     });
+        };
+
 //        $scope.viewUserInfo = function(requesterUserId, requesteeUserId) {
 //             console.log("In viewUserInfo function in ng controller");
 //
@@ -219,6 +244,7 @@ angular.module('NetworkingAngularApp', [])
         $scope.userWhoIsLoggedIn;
         $scope.showAttendees = false;
         $scope.currentEvent;
+        $scope.contactRequested = false;
         console.log("Page loaded!");
 
     });

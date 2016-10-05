@@ -50,9 +50,21 @@
         Attendees at {{currentEvent.name}}: <br/>
         <ol>
         <span ng-repeat="attendee in eventAttendees">
-            <li> {{attendee.firstName}} {{attendee.lastName}}</li> <br/>
+            <li> {{attendee.firstName}} {{attendee.lastName}} <input type="button" ng-click="showEmail(attendee.id)" value="Email"/> </li> <br/>
         </span>
         </ol>
+    </span>
+
+    <br/><br/><br/><br/>
+
+    <span ng-if="contactRequested">
+        <span ng-if="userInfoContainer.errorMessage != null">
+            {{userInfoContainer.errorMessage}} <input type="button" value="Request Contact Info"/>
+        </span>
+
+        <span ng-if="userInfoContainer.user != null">
+            {{userInfoContainer.user.firstName}}'s email: {{userInfoContainer.user.email}}
+        </span>
     </span>
 
     <br/><br/><br/><br/>
