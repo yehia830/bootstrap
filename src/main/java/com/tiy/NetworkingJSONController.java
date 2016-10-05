@@ -328,16 +328,20 @@ public class NetworkingJSONController {
         int userWhoWantsToBeFriendId = friendConnectionContainer.getUserWhoWantsToBeFriendId();
 
         User userWhoGetsNotification = users.findOne(userId);
-        NotificationConnection notificationConnection = new NotificationConnection(userWhoGetsNotification, userWhoWantsToBeFriendId);
-        notificationConnections.save(notificationConnection);
+        RequestContactContainer myReturnContainer;
 
-        ArrayList<User> usersWhoWantYourContactInfo = new ArrayList<>();
-        Iterable<NotificationConnection> allNotificationConnectionsForUser = notificationConnections.findAllByUserId(userId);
-        for (NotificationConnection currentConnection : allNotificationConnectionsForUser) {
-            int currentFriendId = currentConnection.getFriendId();
-            User currentFriendUser = users.findOne(currentFriendId);
-            usersWhoWantYourContactInfo.add(currentFriendUser);
-        }
+        if (notificationConnections.findByUserIdAndFriendId(userId, userWhoWantsToBeFriendId) == null) {
+            NotificationConnection notificationConnection = new NotificationConnection(userWhoGetsNotification, userWhoWantsToBeFriendId);
+            notificationConnections.save(notificationConnection);
+
+
+            ArrayList<User> usersWhoWantYourContactInfo = new ArrayList<>();
+            Iterable<NotificationConnection> allNotificationConnectionsForUser = notificationConnections.findAllByUserId(userId);
+            for (NotificationConnection currentConnection : allNotificationConnectionsForUser) {
+                int currentFriendId = currentConnection.getFriendId();
+                User currentFriendUser = users.findOne(currentFriendId);
+                usersWhoWantYourContactInfo.add(currentFriendUser);
+            }
 
 //        ArrayList<User> usersWhoWantYourContactInfo = new ArrayList<>();
 //        HashMap<User, String> userHashMap = new HashMap<>();
@@ -350,7 +354,19 @@ public class NetworkingJSONController {
 
 //        userWhoGetsNotification.setListOfPeopleAndStatusForSeeingMyStuff(userHashMap);
 
-        RequestContactContainer myReturnContainer = new RequestContactContainer(userWhoGetsNotification, usersWhoWantYourContactInfo);
+            myReturnContainer = new RequestContactContainer(userWhoGetsNotification, usersWhoWantYourContactInfo);
+        } else {
+            ArrayList<User> usersWhoWantYourContactInfo = new ArrayList<>();
+            Iterable<NotificationConnection> allNotificationConnectionsForUser = notificationConnections.findAllByUserId(userId);
+            for (NotificationConnection currentConnection : allNotificationConnectionsForUser) {
+                int currentFriendId = currentConnection.getFriendId();
+                User currentFriendUser = users.findOne(currentFriendId);
+                usersWhoWantYourContactInfo.add(currentFriendUser);
+            }
+
+            myReturnContainer = new RequestContactContainer(null, usersWhoWantYourContactInfo);
+        }
+
 
 //        return userWhoGetsNotification;
         return myReturnContainer;
