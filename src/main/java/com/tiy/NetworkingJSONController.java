@@ -207,11 +207,11 @@ public class NetworkingJSONController {
 
     //We need an eventId
     @RequestMapping(path = "/seeAttendeesForEvent.json", method = RequestMethod.POST)
-    public ArrayList<UserEvent> seeAttendees(@RequestBody int eventId) {
-        ArrayList<UserEvent> listOfAttendeesForEvent = new ArrayList<>();
+    public ArrayList<User> seeAttendees(@RequestBody int eventId) {
+        ArrayList<User> listOfAttendeesForEvent = new ArrayList<>();
         Iterable<UserEvent> allUserEvents = userEvents.findAllByEventId(eventId);
         for (UserEvent currentUserEvent : allUserEvents) {
-            listOfAttendeesForEvent.add(currentUserEvent);
+            listOfAttendeesForEvent.add(currentUserEvent.getUser());
         }
         return listOfAttendeesForEvent;
     }

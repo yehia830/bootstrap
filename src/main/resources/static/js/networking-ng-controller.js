@@ -94,6 +94,7 @@ angular.module('NetworkingAngularApp', [])
              $http.post("/seeAttendeesForEvent.json", eventIWantToJoin.id)
                   .then(
                      function successCallback(response) {
+//                         console.log("**Response data from seeAttendees: " + response.data);
                          console.log(response.data);
                          console.log("Adding data to scope");
                          // Returns a list of attendees
