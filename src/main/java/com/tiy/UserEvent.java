@@ -12,10 +12,10 @@ public class UserEvent {
     @GeneratedValue
     int id;
 
-    @ManyToOne
+    @OneToOne
     User user;
 
-    @ManyToOne
+    @OneToOne
     Event event;
 
     public UserEvent() {
